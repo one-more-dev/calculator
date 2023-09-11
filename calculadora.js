@@ -21,9 +21,10 @@ for(let btn=0; btn<buttons.length; btn++){
             return
         }
         if(buttons[btn].className === "resultado"){
+            const resultado = result(insert.value)
             display[0].innerText = insert.value
-            display[1].innerText = result(insert.value)
-            insert.value = result()
+            display[1].innerText = resultado
+            insert.value = resultado
             return
         }
         insert.value += buttons[btn].innerText
@@ -43,7 +44,7 @@ function result(conta){
     const calculationOperators = conta.split("").filter(char => '+-'.includes(char))
     let calculation = conta.split(secundaryOperators)
     
-    for(let v=0; v<calculation.length; v++){
+    for(let v=0; v<calculation.length; v++){    //  *MULTIPLICATION AND /DIVISION FIRST
         if(primaryOperators.test(calculation[v])){
             const currentOperators = calculation[v].split("").filter(char => 'x*:/'.includes(char))
             let currentValue = calculation[v].split(primaryOperators)
@@ -57,12 +58,12 @@ function result(conta){
         }
     }
 
-    for(let op=0; op<calculationOperators.length; op++){
+    for(let op=0; op<calculationOperators.length; op++){    //  +SUM AND SUBTRACTION SECOND
         const currentResult = calc(calculationOperators[op],calculation[0],calculation[1])
         calculation.splice(1,1)
         calculation[0] = currentResult
     }
 
-    return calculation[0]
+    return isNaN(calculation[0]) === false ? calculation[0] : "Invalid operation"
 }
 
