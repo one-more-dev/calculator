@@ -26,23 +26,31 @@ body{
 .tela2{
 	margin: 10px 0 5px 0;
 	width: 100%;
-	text-align: end;
 	border: solid 2px black;
 }
+
 .tela1{
 	height: 25%;
-	padding: 2.5em 0.5em 0 0;
 	color: white;
 	background-color: blue;
-	font-size: 1.5em;
 }
-.warning{
-	display: none;
-	width: 100%;
-	height: 10%;
+.tela1 .calc{
+	padding-right: 5px;
+	height: 30%;
+	text-align: end;
+}
+.tela1 .calc_result{
+	padding-right: 5px;
+	height: 50%;
+	text-align: end;
+	font-size: 2em;
+}
+.tela1 .calc_warning{
+	padding-left: 3px;
+	height: 20%;
 	color: red;
-	font-size: 0.8em;
 }
+
 .tela2{
 	height: 10%;
 }

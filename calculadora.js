@@ -1,5 +1,4 @@
-const display = document.querySelector(".tela1")
-const warning = document.querySelector(".warning")
+const display = document.querySelectorAll(".tela1 > div")
 const insert = document.querySelector(".tela2")
 const buttons = [
     ...document.querySelectorAll(".numeros > button"),
@@ -7,9 +6,8 @@ const buttons = [
     document.querySelector(".resultado")
 ]
 
-let currentValue = undefined
-const operators = /[\+\-\x\:]/gm
-insert.readOnly = true
+const primaryOperators = /[\x\*\:\/]/gm
+const secundaryOperators = /[\+\-]/gm
 
 
 for(let btn=0; btn<buttons.length; btn++){
@@ -19,14 +17,52 @@ for(let btn=0; btn<buttons.length; btn++){
             return
         }
         if(buttons[btn].innerText === "R"){
-            currentValue = undefined
-            insert.value = ""
-            display.innerText = ""
+            display.forEach(div => div.innerText = "")
             return
         }
         if(buttons[btn].className === "resultado"){
+            display[0].innerText = insert.value
+            display[1].innerText = result(insert.value)
+            insert.value = result()
             return
         }
         insert.value += buttons[btn].innerText
     })
 }
+
+
+function calc(operator,n1,n2){
+    if(operator === "+"){ return Number(n1) + Number(n2) }
+    else if(operator === "-"){ return Number(n1 - n2) }
+    else if(operator === "x" || operator === "*"){ return Number(n1 * n2) }
+    else if(operator === ":" || operator === "/"){ return Number(n1 / n2) }
+}
+
+
+function result(conta){
+    const calculationOperators = conta.split("").filter(char => '+-'.includes(char))
+    let calculation = conta.split(secundaryOperators)
+    
+    for(let v=0; v<calculation.length; v++){
+        if(primaryOperators.test(calculation[v])){
+            const currentOperators = calculation[v].split("").filter(char => 'x*:/'.includes(char))
+            let currentValue = calculation[v].split(primaryOperators)
+
+            for(let op=0; op<currentOperators.length; op++){
+                const currentResult = calc(currentOperators[op],currentValue[0],currentValue[1])
+                currentValue.splice(1,1)
+                currentValue[0] = currentResult
+            }
+            calculation[v] = currentValue[0]
+        }
+    }
+
+    for(let op=0; op<calculationOperators.length; op++){
+        const currentResult = calc(calculationOperators[op],calculation[0],calculation[1])
+        calculation.splice(1,1)
+        calculation[0] = currentResult
+    }
+
+    return calculation[0]
+}
+
